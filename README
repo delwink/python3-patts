@@ -1,0 +1,23 @@
+python3-patts
+=============
+
+Python bindings for [libpatts][1]
+
+For instructions on building and installing this module, check out
+[these instructions](INSTALL).
+
+Hacking
+-------
+
+We strive to be [PEP 8][4] compliant, but there are exceptions to every
+rule. python3-patts is [free software][2], released under version 3 of the GNU
+Affero General Public License. You are free to copy, share, and modify the
+software under those terms. See [COPYING](COPYING) for more details.
+
+To submit a patch, [submit your diff to Delwink][3] or us GitHub's pull request
+system.
+
+[1]: http://delwink.com/software/patts.html
+[2]: http://gnu.org/philosophy/free-sw.html
+[3]: mailto:contribute@delwink.com
+[4]: https://www.python.org/dev/peps/pep-0008/
