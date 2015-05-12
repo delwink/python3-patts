@@ -167,3 +167,51 @@ def version_check():
 
     return out.value
 
+## Creates a new user on the database and applies proper permissions for a new
+# user.
+#  @param id A username for the new user.
+#  @param host The hostname (or wildcard string) from which this user will be
+# allowed to connect.
+#  @param passwd A password for the new user.
+def create_user(id, host, passwd):
+    rc = _libpatts_so.patts_create_user(id.encode('utf-8'),
+                                        host.encode('utf-8'),
+                                        passwd.encode('utf-8'))
+    _check_for_error(rc)
+
+## Creates a new PATTS task type.
+#  @param parent_id The ID number of the parent type ('0' if top-level).
+#  @param display_name The display name of the new type.
+def create_task(parent_id, display_name):
+    rc = _libpatts_so.patts_create_task(parent_id.encode('utf-8'),
+                                        display_name.encode('utf-8'))
+    _check_for_error(rc)
+
+## Deactivates a user in the database.
+#  @param id The username of the user to be deactivated.
+def delete_user(id):
+    rc = _libpatts_so.patts_delete_user(id.encode('utf-8'))
+    _check_for_error(rc)
+
+## Deactivates a task type.
+#  @param id String representation of the ID number of the task to be
+# deactivated.
+def delete_task(id):
+    rc = _libpatts_so.patts_delete_task(id.encode('utf-8'))
+    _check_for_error(rc)
+
+## Grants admin permissions to a PATTS user.
+#  @param id Username of the new admin user.
+#  @param host Hostname for which to grant user privileges.
+def grant_admin(id, host):
+    rc = _libpatts_so.patts_grant_admin(id.encode('utf-8'),
+                                        host.encode('utf-8'))
+    _check_for_error(rc)
+
+## Revokes admin permissions from a PATTS user.
+#  @param id Username of the admin user to be demoted.
+#  @param host Hostname for which to deny the user privileges.
+def revoke_admin (id, host):
+    rc = _libpatts_so.patts_revoke_admin (id.encode('utf-8'),
+                                          host.encode('utf-8'))
+    _check_for_error(rc)
