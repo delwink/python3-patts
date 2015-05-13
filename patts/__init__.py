@@ -215,3 +215,39 @@ def revoke_admin (id, host):
     rc = _libpatts_so.patts_revoke_admin (id.encode('utf-8'),
                                           host.encode('utf-8'))
     _check_for_error(rc)
+
+## Gets the active task for the current user.
+def get_active_task():
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_active_task(byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets the tree of active tasks for the user.
+def get_tree():
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_tree(byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Clock into a task.
+#  @param type String representation of the typeID of the task.
+def clockin(type):
+    rc = _libpatts_so.patts_clockin(type.encode('utf-8'))
+    _check_for_error(rc)
+
+## Clock out of a task and all its subtasks.
+#  @param item String representation of the item ID.
+def clockout(item):
+    rc = _libpatts_so.patts_clockout(item.encode('utf-8'))
+    _check_for_error(rc)
