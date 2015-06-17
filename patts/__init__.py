@@ -251,3 +251,16 @@ def clockin(type):
 def clockout(item):
     rc = _libpatts_so.patts_clockout(item.encode('utf-8'))
     _check_for_error(rc)
+
+## Gets all PATTS users.
+#  @return JSON-encoded string for all users and the respective data.
+def get_users():
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_users(byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
