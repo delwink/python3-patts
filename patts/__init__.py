@@ -264,3 +264,100 @@ def get_users():
     _libpatts_so.patts_free(c_out)
 
     return py_out
+
+## Gets a PATTS user by username.
+#  @param id Username for which to search (type str).
+#  @return JSON-encoded string for the user's data.
+def get_user_byid(id):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_user_byid(byref(c_out), id.encode('utf-8'))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets all PATTS task types.
+#  @return JSON-encoded string for all task types and the respective data.
+def get_types():
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_types(byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets a PATTS task type by its ID number.
+#  @param id The ID number for which to search (type str).
+#  @return JSON-encoded string for the type's data.
+def get_type_byid(id):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_type_byid(byref(c_out, id.encode('utf-8')))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets all the child types of a particular PATTS task type.
+#  @param parent_id The ID number of the parent type (type str).
+#  @return JSON-encoded string for the child types and the respective data.
+def get_child_types(parent_id):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_child_types(byref(c_out),
+                                            parent_id.encode('utf-8'))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets all PATTS tasks.
+#  @return JSON-encoded string for all tasks and the respective data.
+def get_items():
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_items(byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets a PATTS task by ID number.
+#  @param id The ID number for which to search (type str).
+#  @return JSON-encoded string for the task and its respective data.
+def get_item_byid(id):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_item_byid(byref(c_out), id.encode('utf-8'))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Gets the last PATTS task ID number for a given user.
+#  @param user_id Username with which to find the task ID (type str).
+#  @return String representation of the task ID number.
+def get_last_item(user_id):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_last_item(byref(out), user_id.encode('utf-8'))
+    _check_for_error(rc)
+
+    py_out = c_out.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
