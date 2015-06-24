@@ -304,3 +304,21 @@ def get_item_byid(id):
 #  @return String representation of the task ID number.
 def get_last_item(user_id):
     return _get_arg(_libpatts_so.patts_get_last_item, user_id)
+
+## Gets all PATTS items for a given user.
+#  @param user_id Username for which to search.
+#  @return JSON-encoded string for the user's tasks and the respecive data.
+def get_items_byuser(user_id):
+    return _get_arg(_libpatts_so.patts_get_items_byuser, user_id)
+
+## Gets all PATTS items for a given user that are on the clock.
+#  @param user_id Username for which to search.
+#  @return JSON-encoded string for the user's tasks and the respective data.
+def get_items_byuser_onclock(user_id):
+    return _get_arg(_libpatts_so.patts_get_items_byuser_onclock, user_id)
+
+## Gets all child items for a PATTS task (calculated based on data).
+#  @param id ID number of the parent task (type str).
+#  @return JSON-encoded string for the child tasks and the respective data.
+def get_child_items(id):
+    return _get_arg(_libpatts_so.patts_get_child_items, id)
