@@ -21,6 +21,7 @@
 #  @author David McMackins II
 #  @version 0.0
 
+from json import loads
 from ctypes import *
 
 __title__ = 'patts'
@@ -231,7 +232,7 @@ def _get(fn):
     py_out = c_out.decode('utf-8')
     _libpatts_so.patts_free(c_out)
 
-    return py_out
+    return loads(py_out)
 
 def _get_arg(fn, arg):
     c_out = c_char_p()
@@ -242,15 +243,16 @@ def _get_arg(fn, arg):
     py_out = c_out.decode('utf-8')
     _libpatts_so.patts_free(c_out)
 
-    return py_out
+    return loads(py_out)
 
 ## Gets the active task for the current user.
-#  @return JSON-encoded string for the active task and its respective data.
+#  @return Dictionary of the task data.
 def get_active_task():
-    return _get(_libpatts_so.patts_get_active_task)
+    return _get(_libpatts_so.patts_get_active_task)[0]
 
 ## Gets the tree of active tasks for the user.
-#  @return JSON-encoded string for the task tree.
+#  @return A dictionary of the active tasks' type, user, and start time
+# organized by ID keys.
 def get_tree():
     return _get(_libpatts_so.patts_get_tree)
 
@@ -267,43 +269,43 @@ def clockout(item):
     _check_for_error(rc)
 
 ## Gets all PATTS users.
-#  @return JSON-encoded string for all users and the respective data.
+#  @return Dictionary of all the users with username keys.
 def get_users():
     return _get(_libpatts_so.patts_get_users)
 
 ## Gets a PATTS user by username.
-#  @param id Username for which to search (type str).
-#  @return JSON-encoded string for the user's data.
+#  @param id Username for which to search.
+#  @return Dictionary of the user's data.
 def get_user_byid(id):
-    return _get_arg(_libpatts_so.patts_get_user_byid, id)
+    return _get_arg(_libpatts_so.patts_get_user_byid, id)[id]
 
 ## Gets all PATTS task types.
-#  @return JSON-encoded string for all task types and the respective data.
+#  @return Dictionary of task types with ID keys.
 def get_types():
     return _get(_libpatts_so.patts_get_types)
 
 ## Gets a PATTS task type by its ID number.
-#  @param id The ID number for which to search (type str).
-#  @return JSON-encoded string for the type's data.
+#  @param id String representation of the ID number for which to search.
+#  @return Dictionary of the type's data.
 def get_type_byid(id):
-    return _get_arg(_libpatts_so.patts_get_type_byid, id)
+    return _get_arg(_libpatts_so.patts_get_type_byid, id)[id]
 
 ## Gets all the child types of a particular PATTS task type.
-#  @param parent_id The ID number of the parent type (type str).
-#  @return JSON-encoded string for the child types and the respective data.
+#  @param parent_id String representation of the ID number of the parent type.
+#  @return Dictionary of the child types with ID keys.
 def get_child_types(parent_id):
     return _get_arg(_libpatts_so.patts_get_child_types, parent_id)
 
 ## Gets all PATTS tasks.
-#  @return JSON-encoded string for all tasks and the respective data.
+#  @return Dictionary of all tasks with ID keys.
 def get_items():
     return _get(_libpatts_so.patts_get_items)
 
 ## Gets a PATTS task by ID number.
-#  @param id The ID number for which to search (type str).
-#  @return JSON-encoded string for the task and its respective data.
+#  @param id String representation of the ID number for which to search.
+#  @return Dictionary of the task's data.
 def get_item_byid(id):
-    return _get_arg(_libpatts_so.patts_get_item_byid, id)
+    return _get_arg(_libpatts_so.patts_get_item_byid, id)[id]
 
 ## Gets the last PATTS task ID number for a given user.
 #  @param user_id Username with which to find the task ID (type str).
@@ -313,18 +315,18 @@ def get_last_item(user_id):
 
 ## Gets all PATTS items for a given user.
 #  @param user_id Username for which to search.
-#  @return JSON-encoded string for the user's tasks and the respecive data.
+#  @return Dictionary of user's tasks with ID keys.
 def get_items_byuser(user_id):
     return _get_arg(_libpatts_so.patts_get_items_byuser, user_id)
 
 ## Gets all PATTS items for a given user that are on the clock.
 #  @param user_id Username for which to search.
-#  @return JSON-encoded string for the user's tasks and the respective data.
+#  @return Dictionary of user's active tasks with ID keys.
 def get_items_byuser_onclock(user_id):
     return _get_arg(_libpatts_so.patts_get_items_byuser_onclock, user_id)
 
 ## Gets all child items for a PATTS task (calculated based on data).
 #  @param id ID number of the parent task (type str).
-#  @return JSON-encoded string for the child tasks and the respective data.
+#  @return Dictionary of the child tasks with ID keys.
 def get_child_items(id):
     return _get_arg(_libpatts_so.patts_get_child_items, id)
