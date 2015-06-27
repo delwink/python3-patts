@@ -15,6 +15,12 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
+## @package patts
+#  Python API for Delwink's libpatts C library.
+#  @date 06/27/2015
+#  @author David McMackins II
+#  @version 0.0
+
 from ctypes import *
 
 __title__ = 'patts'
@@ -212,8 +218,8 @@ def grant_admin(id, host):
 #  @param id Username of the admin user to be demoted.
 #  @param host Hostname for which to deny the user privileges.
 def revoke_admin (id, host):
-    rc = _libpatts_so.patts_revoke_admin (id.encode('utf-8'),
-                                          host.encode('utf-8'))
+    rc = _libpatts_so.patts_revoke_admin(id.encode('utf-8'),
+                                         host.encode('utf-8'))
     _check_for_error(rc)
 
 def _get(fn):
