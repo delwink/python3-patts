@@ -152,7 +152,7 @@ def setup(type='mysql', host='localhost', user='root', passwd=None,
     real_passwd = None if None == passwd else passwd.encode('utf-8')
     real_db = None if None == database else database.encode('utf-8')
 
-    rc = _libsqon_so.patts_setup(
+    rc = _libpatts_so.patts_setup(
         _PATTS_CONNECTION_TYPES[type],
         host.encode('utf-8'),
         user.encode('utf-8'),
