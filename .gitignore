@@ -3,3 +3,4 @@ dist/
 build/
 sqon/__pycache__/
 doc/api/
+*__pycache*

@@ -79,7 +79,7 @@ _PATTS_CONNECTION_TYPES = {
     'mysql': 1
 }
 
-_libpatts_so = CDLL('libsqon.so.0')
+_libpatts_so = CDLL('libpatts.so.0')
 
 def _check_for_error(rc):
     if 0 == rc:
