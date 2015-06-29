@@ -59,8 +59,7 @@ _ERRORS = {
     -20: ('ConnectionError', 'There was an error establishing a connection '
                              'with the database'),
     -21: ('NoColumnsInSetError', 'No columns were in the result set'),
-    -23: ('NoPrimaryKeyError', 'Requested primary key was not found in '
-                               'the table'),
+    -23: (KeyError, 'Requested primary key was not found in the table'),
     -24: ('PrimaryKeyNotUniqueError', 'Requested primary key was not unique'),
 
     # actual libpatts error codes
@@ -71,7 +70,9 @@ _ERRORS = {
                                  'handling the query'),
     -64: ('UnexpectedError', 'An error occurred which was not anticipated'),
     -65: ('TaskUnavailableError', 'Invalid task chosen for clocking in'),
-    -73: ('InvalidUserError', 'Selected user was not found in the database')
+    -73: (KeyError, 'Selected user was not found in the database'),
+    -74: (IndexError, 'Selected item was not found in the database or is '
+                      'inactive')
 }
 _UNKNOWN_ERROR_STRING = 'Error code {} occurred while processing the request'
 
