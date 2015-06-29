@@ -121,13 +121,14 @@ def init(type='mysql', host='localhost', user='root', passwd=None,
 def cleanup():
     _libpatts_so.patts_cleanup()
 
+_libpatts_so.patts_get_user.restype = c_char_p
 ## Gets the active username.
 def get_user():
-    return _libpatts_so.patts_get_user().value.decode('utf-8')
+    return _libpatts_so.patts_get_user().decode('utf-8')
 
 ## Checks user's admin rights.
 def have_admin():
-    return _libpatts_so.patts_have_admin().value
+    return _libpatts_so.patts_have_admin() == 1
 
 ## Checks the database schema version on the remote server.
 def get_db_version():
@@ -229,7 +230,7 @@ def _get(fn):
     rc = fn(byref(c_out))
     _check_for_error(rc)
 
-    py_out = c_out.decode('utf-8')
+    py_out = c_out.value.decode('utf-8')
     _libpatts_so.patts_free(c_out)
 
     return loads(py_out)
@@ -240,15 +241,18 @@ def _get_arg(fn, arg):
     rc = fn(byref(c_out), arg.encode('utf-8'))
     _check_for_error(rc)
 
-    py_out = c_out.decode('utf-8')
+    py_out = c_out.value.decode('utf-8')
     _libpatts_so.patts_free(c_out)
 
     return loads(py_out)
 
 ## Gets the active task for the current user.
-#  @return Dictionary of the task data.
+#  @return Dictionary of the task data or None.
 def get_active_task():
-    return _get(_libpatts_so.patts_get_active_task)[0]
+    try:
+        return _get(_libpatts_so.patts_get_active_task)[0]
+    except IndexError:
+        return None
 
 ## Gets the tree of active tasks for the user.
 #  @return A dictionary of the active tasks' type, user, and start time
@@ -309,9 +313,21 @@ def get_item_byid(id):
 
 ## Gets the last PATTS task ID number for a given user.
 #  @param user_id Username with which to find the task ID (type str).
-#  @return String representation of the task ID number.
+#  @return String representation of the task ID number or None.
 def get_last_item(user_id):
-    return _get_arg(_libpatts_so.patts_get_last_item, user_id)
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_last_item(byref(c_out),
+                                          user_id.encode('utf-8'))
+    _check_for_error(rc)
+
+    if c_out.value == None:
+        return None
+
+    py_out = c_out.value.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
 
 ## Gets all PATTS items for a given user.
 #  @param user_id Username for which to search.
