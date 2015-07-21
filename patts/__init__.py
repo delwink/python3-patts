@@ -17,16 +17,16 @@
 
 ## @package patts
 #  Python API for Delwink's libpatts C library.
-#  @date 06/27/2015
+#  @date 07/20/2015
 #  @author David McMackins II
-#  @version 0.0
+#  @version 0.1
 
 from sqon import _SQON_ERRORS
 from json import loads
 from ctypes import *
 
 __title__ = 'patts'
-__version__ = '0.0.0'
+__version__ = '0.1.0'
 __author__ = 'David McMackins II'
 __license__ = 'AGPLv3'
 __copyright__ = 'Copyright 2015 Delwink, LLC'
@@ -114,6 +114,71 @@ def init(type='mysql', host='localhost', user='root', passwd=None,
 # using the library before a second call to init().
 def cleanup():
     _libpatts_so.patts_cleanup()
+
+## Explicitly connect to the database.
+#
+#  This is not absolutely necessary to use, since the other functions will
+# automatically connect to the database as needed. Use this as a
+# performance enhancement when making queries in rapid succession.
+def connect():
+    rc = _libpatts_so.patts_connect()
+    _check_for_error(rc)
+
+## Close connection to the database.
+#
+#  Only needed after explicitly connecting to the database.
+def close():
+    _libpatts_so.patts_close()
+
+## Query the database.
+#  @param query_str SQL statement to be run on the database.
+#  @param primary_key If expecting a result set, the key by which to organize
+# the JSON object returned.
+#  @return List of result set if primary_key is None, else a dictionary in
+# which the keys are primary_key and the values are the remaining results.
+def query(query_str, primary_key=None):
+    c_out = c_char_p()
+    real_pk_param = \
+            None if primary_key == None else primary_key.encode('utf-8')
+
+    rc = _libpatts_so.patts_query(query_str.encode('utf-8'), byref(c_out),
+                                  real_pk_param)
+    _check_for_error(rc)
+
+    py_out = c_out.value.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return loads(py_out)
+
+## Get the primary key of a table.
+#  @param table Database table for which to get the primary key.
+#  @return String representation of the primary key.
+def get_primary_key(table):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_get_primary_key(table.encode('utf-8'),
+                                            byref(c_out))
+    _check_for_error(rc)
+
+    py_out = c_out.value.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
+
+## Escape a string to be placed in a query.
+#  @param input The string to be escaped.
+#  @param quote Whether to surround the output in apostrophe characters.
+#  @return The escaped string.
+def escape_string(input, quote=False):
+    c_out = c_char_p()
+
+    rc = _libpatts_so.patts_escape(input.encode('utf-8'), byref(c_out), quote)
+    _check_for_error(rc)
+
+    py_out = c_out.value.decode('utf-8')
+    _libpatts_so.patts_free(c_out)
+
+    return py_out
 
 _libpatts_so.patts_get_user.restype = c_char_p
 ## Gets the active username.
