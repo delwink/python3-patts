@@ -26,7 +26,7 @@ from json import loads
 from ctypes import *
 
 __title__ = 'patts'
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'David McMackins II'
 __license__ = 'AGPLv3'
 __copyright__ = 'Copyright 2015 Delwink, LLC'
