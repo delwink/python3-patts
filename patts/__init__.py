@@ -21,7 +21,7 @@
 #  @author David McMackins II
 #  @version 0.1
 
-from sqon import _SQON_ERRORS
+from sqon.error import SQON_ERRORS
 from json import loads
 from ctypes import *
 
@@ -64,7 +64,7 @@ _PATTS_ERRORS = {
                       'inactive')
 }
 
-_ERRORS = _SQON_ERRORS.copy()
+_ERRORS = SQON_ERRORS.copy()
 _ERRORS.update(_PATTS_ERRORS)
 
 _UNKNOWN_ERROR_STRING = '{}'
