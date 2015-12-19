@@ -2,5 +2,5 @@ dist/
 *.egg-info/
 build/
 sqon/__pycache__/
-doc/api/
+doc/
 *__pycache*
