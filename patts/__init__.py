@@ -1,6 +1,6 @@
 ##
 ##  python3-patts - Python bindings for libpatts
-##  Copyright (C) 2015 Delwink, LLC
+##  Copyright (C) 2015-2016 Delwink, LLC
 ##
 ##  This program is free software: you can redistribute it and/or modify
 ##  it under the terms of the GNU Affero General Public License as published by
@@ -26,10 +26,10 @@ from json import loads
 from ctypes import *
 
 __title__ = 'patts'
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'David McMackins II'
 __license__ = 'AGPLv3'
-__copyright__ = 'Copyright 2015 Delwink, LLC'
+__copyright__ = 'Copyright 2015-2016 Delwink, LLC'
 
 ## Version of the supported C API
 PATTS_VERSION = '0.0'
@@ -308,10 +308,7 @@ def _get_arg(fn, arg):
 ## Gets the active task for the current user.
 #  @return Dictionary of the task data or None.
 def get_active_task():
-    try:
-        return _get(_libpatts_so.patts_get_active_task)[0]
-    except IndexError:
-        return None
+    return _get(_libpatts_so.patts_get_active_task) or None
 
 ## Gets the tree of active tasks for the user.
 #  @return A dictionary of the active tasks' type, user, and start time
