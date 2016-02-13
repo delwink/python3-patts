@@ -17,22 +17,22 @@
 
 ## @package patts
 #  Python API for Delwink's libpatts C library.
-#  @date 07/20/2015
+#  @date 02/12/2016
 #  @author David McMackins II
-#  @version 0.1
+#  @version 0.2
 
 from sqon.error import SQON_ERRORS
 from json import loads
 from ctypes import *
 
 __title__ = 'patts'
-__version__ = '0.1.2'
+__version__ = '0.2.0'
 __author__ = 'David McMackins II'
 __license__ = 'AGPLv3'
 __copyright__ = 'Copyright 2015-2016 Delwink, LLC'
 
 ## Version of the supported C API
-PATTS_VERSION = '0.0'
+PATTS_VERSION = '0.1'
 
 ## Copyright information for the C API
 PATTS_COPYRIGHT = \
@@ -182,7 +182,11 @@ def escape_string(input, quote=False):
 
 _libpatts_so.patts_get_user.restype = c_char_p
 ## Gets the active username.
-def get_user():
+#  @param escaped Whether to get an escaped version of the username.
+def get_user(escaped=False):
+    if escaped:
+        return _libpatts_so.patts_get_user_esc().decode('utf-8')
+
     return _libpatts_so.patts_get_user().decode('utf-8')
 
 ## Checks user's admin rights.
@@ -213,6 +217,30 @@ def setup(type='mysql', host='localhost', user='root', passwd=None,
     real_db = None if None == database else database.encode('utf-8')
 
     rc = _libpatts_so.patts_setup(
+        _PATTS_CONNECTION_TYPES[type],
+        host.encode('utf-8'),
+        user.encode('utf-8'),
+        real_passwd,
+        real_db,
+        port.encode('utf-8')
+    )
+    _check_for_error(rc)
+
+## Upgrades an existing PATTS database.
+#  @param type A string representation of the database type; currently
+# supported: 'mysql' (default).
+#  @param host The hostname or IP address of the database server.
+#  @param user Username with which to log into the server.
+#  @param passwd Password by which to authenticate with the server (default is
+# no password).
+#  @param database The name of the PATTS database to be upgraded.
+#  @param port String representation of the port number.
+def upgrade_db(type='mysql', host='localhost', user='root', passwd=None,
+               database=None, port='0'):
+    real_passwd = None if None == passwd else passwd.encode('utf-8')
+    real_db = None if None == database else database.encode('utf-8')
+
+    rc = _libpatts_so.patts_upgrade_db(
         _PATTS_CONNECTION_TYPES[type],
         host.encode('utf-8'),
         user.encode('utf-8'),
