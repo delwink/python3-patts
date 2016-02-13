@@ -37,7 +37,7 @@ PATTS_VERSION = '0.1'
 ## Copyright information for the C API
 PATTS_COPYRIGHT = \
 """libpatts - Backend library for PATTS Ain't Time Tracking Software
-Copyright (C) 2014-2015 Delwink, LLC
+Copyright (C) 2014-2016 Delwink, LLC
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
