@@ -17,39 +17,22 @@
 
 ## @package patts
 #  Python API for Delwink's libpatts C library.
-#  @date 02/12/2016
+#  @date 02/16/2016
 #  @author David McMackins II
-#  @version 0.2
+#  @version 0.3
 
 from sqon.error import SQON_ERRORS
 from json import loads
 from ctypes import *
 
 __title__ = 'patts'
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 __author__ = 'David McMackins II'
 __license__ = 'AGPLv3'
 __copyright__ = 'Copyright 2015-2016 Delwink, LLC'
 
 ## Version of the supported C API
-PATTS_VERSION = '0.1'
-
-## Copyright information for the C API
-PATTS_COPYRIGHT = \
-"""libpatts - Backend library for PATTS Ain't Time Tracking Software
-Copyright (C) 2014-2016 Delwink, LLC
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, version 3 only.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>."""
+PATTS_VERSION = '1.0'
 
 _PATTS_ERRORS = {
     -60: ('LoadError', 'An error occurred when internally loading JSON-encoded'
@@ -73,7 +56,7 @@ _PATTS_CONNECTION_TYPES = {
     'mysql': 1
 }
 
-_libpatts_so = CDLL('libpatts.so.0')
+_libpatts_so = CDLL('libpatts.so.1')
 
 def _check_for_error(rc):
     if 0 == rc:
@@ -430,3 +413,9 @@ def get_items_byuser_onclock(user_id):
 #  @return Dictionary of the child tasks with ID keys.
 def get_child_items(id):
     return _get_arg(_libpatts_so.patts_get_child_items, id)
+
+_libpatts_so.patts_get_library_version.restype = c_char_p
+## Gets the version of the libpatts C library.
+#  @return String representation of the installed libpatts version.
+def get_c_library_version():
+    return _libpatts_so.patts_get_library_version().decode('utf-8')
