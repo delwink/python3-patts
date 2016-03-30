@@ -9,6 +9,7 @@ dependencies.
 | CPython 3          | Python programming language interpreter.              |
 | python3-setuptools | Python 3 package distribution and installation tools. |
 | libpatts           | C backend functionality.                              |
+| python3-sqon       | SQON error types                                      |
 
 Installing the Dependencies
 ---------------------------
@@ -20,18 +21,12 @@ Debian GNU/Linux and derivatives (such as Trisquel).
     # apt-get install python3 python3-setuptools
 
 You will likely need to build libpatts manually, unless your software
-distribution packages it for you. The following should work on any GNU system.
-
-    $ wget http://delwink.com/dl/libpatts-delX.Y.Z.tar.gz
-    $ tar xzf libpatts-delX.Y.Z.tar.gz
-    $ cd libpatts-delX.Y.Z
-    $ ./autogen.sh
-    $ ./configure
-    $ make
-    # make install
+distribution packages it for you. Find it on Delwink's website.
 
 Take a look at libpatts' INSTALL file for more details on building it and
 properly installing it for your operating system.
+
+You'll need to get python3-sqon from Delwink as well.
 
 Building python3-patts
 ----------------------
